@@ -1,52 +1,29 @@
-#! /bin/bash 
-
-# generate 3 digit random number
-function generateRandomNumber() {
-
-randomNumber=$((RANDOM%1000))
-
-echo $randomNumber
-
-
-}
-
-# Find the second largest number 
-function sortTheArray() {
-randomNumbers=("$@")
-
-
-length="${#randomNumbers[@]}"
-
-for (( counterOne = 0; counterOne < ${#randomNumbers[@]}; counterOne++ ))
+#! /bin/bash/ -x
+for((i=0; i<10; i++))
 do
-	for (( counterTwo = $counterOne; counterTwo < ${#randomNumbers[@]}; counterTwo++ ))
+num=$(( ( RANDOM % 1000 ) + 100 ))
+array[$i]="$num"
+done
+echo ${array[@]}
+
+for ((i=0; i<10; i++))
+do
+	for ((j=0; j<10; j++))
 	do
-		if [ ${randomNumbers[$counterOne]} -gt ${randomNumbers[$counterTwo]}  ]; then	
-			temp=${randomNumbers[$counterOne]}
-			randomNumbers[$counterOne]=${randomNumbers[$counterTwo]}
-			randomNumbers[$counterTwo]=$temp
+		if [ ${array[i]} -gt ${array[j]} ]
+		then
+			temp=${array[i]}
+			array[i]=${array[j]}
+			array[j]=$temp
+
 		fi
 	done
 done
-echo "Sorted array is " ${randomNumbers[@]}
-echo "Second Largest number is ${randomNumbers[ $(( ${#randomNumbers[@]}-2 )) ]}"
-echo "Second Smallest number is ${randomNumbers[1]}"
-}
-
-# Store the random number to the unsorted array
-
-function storeRandomNumber() {
-
-counter=0
-
-while [ $counter -lt 10 ]
-do
-	randomNumberArray[((counter++))]=$(generateRandomNumber)
-done
-
-echo ${randomNumberArray[@]}	
-
-sortTheArray ${randomNumberArray[@]} 
-}
-
-storeRandomNumber
+echo "sorted array"
+echo ${array[@]}
+large=${array[(1)]}
+small=${array[(i - 2)]}
+echo "2 nd largest number in an array is"
+echo $large
+echo "2 nd smallest number in an array is"
+echo $small
