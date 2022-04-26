@@ -1,64 +1,46 @@
-diceResult=(0 0 0 0 0 0 0)
+#! /bin/bash/ -x
 
-function rollDice() {
-    echo $((RANDOM%6+1))
-}
 
-function findMaxMinDice() {
-resultDice=("$@")
-max=${resultDice[1]}
-maxDice=1
-min=${resultDice[1]}
-minDice=1
-for ((counter=2; counter < ${#resultDice[@]} ; counter++))
+for i in `seq 1000`
 do
-    if [ $max -lt ${resultDice[$counter]} ]
-    then
-        max=${resultDice[$counter]}
-        maxDice=$counter
-    fi
+a=10
+num=$(( ( RANDOM%6 ) +1 ))
+number[i]=$num
+case ${number[i]} in
+	1) (( one++ )) ;;
+        2) (( two++ ))  ;;
+        3) (( three++ )) ;;
+        4) (( four++ )) ;;
+        5) (( five++ )) ;;
+        6) (( six++ )) ;;
+esac
+case $a in
+        $one) echo "one is reached maximum times " 
+		(( max1++ ))
+		exit 0 ;;
+        $two) echo "two is reached maximum times "
+                (( max2++ ))
+ 
+		exit 0 ;;
+        $three) echo "three is reached maximum times "
+                (( max3++ ))
 
-    if [ $min -gt ${resultDice[$counter]} ]
-    then
-        min=${resultDice[$counter]}
-        minDice=$counter
-    fi
+		 exit 0 ;;
+        $four) echo "four is reached maximum times "
+                (( max4++ ))
+
+		 exit 0 ;;
+        $five) echo "five is reached maximum times " 
+                (( max5++ ))
+		exit 0 ;;
+        $six) echo "six is reached maximum times "  
+                (( max6++ ))
+		exit 0;;
+esac
+declare -A dictionary=( [k1]="$one" [k2]="$two" [k3]="$three" [k4]="$four" [k5]="$five" [k6]="$six" )
+echo ${dictionary[@]}
+#for key in ${!dictionary[@]}
+#do
+#	echo $key
+#done
 done
-
-echo "Dice with max times $maxDice and min times $minDice "
-
-}
-
-
-function checkMaxDiceTimes() {
-    prevResult=$1
-    if [  $prevResult -eq 10 ]
-    then
-        isPresentMax=1
-    else
-        isPresentMax=0
-    fi
-
-    echo $isPresentMax
-}
-
-while ((1))
-do
-    dice=$(rollDice)
-    if [[ $( checkMaxDiceTimes ${diceResult[$dice]} ) -eq 1 ]]
-    then
-        break
-    else
-        diceResult[((dice))]=$((diceResult[((dice))]+1))
-        if [[ $( checkMaxDiceTimes ${diceResult[$dice]} ) -eq 1 ]]
-        then
-            break
-        fi
-    fi
-done
-echo "Dice Roll Times \n"
-for i in " ${!diceResult[@]}"
-do
-    echo "$i:${diceResult[$i]}"
-done
-findMaxMinDice ${diceResult[@]}
